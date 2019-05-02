@@ -6,6 +6,29 @@ from UI.grid import Grid, Node
 from pygame.locals import *
 from time import sleep, time
 
+class Apple:
+
+    position = (0,0)
+    apple_node = None
+
+    def __init__(self,grid: Grid):
+        self.grid = grid
+        
+
+    def newApple(self):
+        while(1):
+            self.position = (random.randint(0,len(self.grid.table)-1),random.randint(0,(len(self.grid.table[len(self.grid.table)-1]) -1)))
+            node = self.grid.return_node(self.position[0],self.position[1])
+            if(node.field_type == 0):
+                self.grid.change_field(self.position[0],self.position[1],1)
+                self.apple_node = self.grid.return_node(self.position[0],self.position[1])
+                break
+
+    def drawApple(self,screen):
+        self.apple_node.draw(screen)
+
+        
+
 
 
 
@@ -31,7 +54,7 @@ class Snake:
             position = ( self.head.position[0]+move[0],self.head.position[1] + move[1])
             print(position)
             self.head = self.grid.return_node(position[0],position[1])
-            self.grid.change_field(position[0],position[1],1)
+            self.grid.change_field(position[0],position[1],2)
             self.body_list.pop
             self.body_list.append(self.head)
 
@@ -90,11 +113,14 @@ class Window():
         self.grid.draw_map(self.screen)
 
         self.snake = Snake((0,0),grid)
+        self.apple = Apple(grid)
 
 
     def UpdateOnLoop(self):
         self.snake.update()
         self.snake.drawSnake(self.screen)
+        self.apple.newApple()
+        self.apple.drawApple(self.screen)
 
     def Start(self):
         last_time = time()
