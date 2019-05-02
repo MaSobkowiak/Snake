@@ -1,11 +1,73 @@
 import pygame as pg
 import numpy as np
 import random
+import time
 from UI.grid import Grid, Node
+from pygame.locals import *
+from time import sleep, time
+
+
+
+
+
+class Snake:
+    body_list = []
+    head = None
+    length = 0 
+    direction = 1
+    
+    def __init__(self,start: (int,int),grid : Grid):
+        self.grid =grid
+        grid.change_field(start[0],start[1],2)
+        self.length =1
+        self.head = grid.return_node(start[0],start[1])
+        self.body_list.append(self.head)
+
+    def update(self):
+
+        def changeHead(self, move: (int,int)):
+            position = (0,0)
+            self.grid.change_field(self.head.row,self.head.col, 0)
+            position = ( self.head.position[0]+move[0],self.head.position[1] + move[1])
+            print(position)
+            self.head = self.grid.return_node(position[0],position[1])
+            self.grid.change_field(position[0],position[1],1)
+            self.body_list.pop
+            self.body_list.append(self.head)
+
+        if(self.direction ==0):
+            changeHead(self, (0, -1))
+        if(self.direction ==1):
+            changeHead(self, (-1, 0))
+        if(self.direction ==2):
+            changeHead(self, (0, 1))
+        if(self.direction ==3):
+            changeHead(self, (1, 0))
+
+   
+
+
+    def moveLeft(self):
+        self.direction = 0
+    def moveRight(self):
+        self.direction =2
+    def moveUp(self):
+        self.direction =1
+    def moveDown(self):
+        self.direction =3
+
+    def drawSnake(self,screen):
+        for x in self.body_list:
+            x.draw(screen)
+            #pg.time.delay(500)
+    
+     
 
 
 class Window():
-    def __init__(self, grid: Grid):
+
+    
+    def __init__(self, grid: Grid, start: (int,int)):
         pg.init()   # pylint: disable=no-member
         # setup window
         pg.display.set_caption('Snake')
@@ -18,18 +80,45 @@ class Window():
         width = Node.r_width
         height = Node.r_height
         margin = Node.r_margin
-
+        
 
         screen_width = cols * (width + margin) + 2 * margin
         screen_height = rows * (height + margin) + 2 * margin
 
-        self.screen = pg.display.set_mode([screen_width, screen_height])
-
-
+        self.screen = pg.display.set_mode((screen_width, screen_height),pg.HWSURFACE)
         self.clock = pg.time.Clock()
         self.grid.draw_map(self.screen)
-        
+
+        self.snake = Snake((0,0),grid)
+
+
+    def UpdateOnLoop(self):
+        self.snake.update()
+        self.snake.drawSnake(self.screen)
+
+    def Start(self):
+        last_time = time()
+        while(1):
+            pg.event.pump()
+            keys = pg.key.get_pressed() 
+            
+            if (keys[K_RIGHT]):
+                self.snake.moveRight()                
+            if (keys[K_LEFT]):
+                self.snake.moveLeft() 
+            if (keys[K_UP]):
+                self.snake.moveUp()
+            if (keys[K_DOWN]):
+                self.snake.moveDown()
+            if (keys[K_ESCAPE]):
+                pg.quit() # pylint: disable=no-member
+
+           
+            if(time()-last_time >0.5):
+                last_time = time()
+                self.UpdateOnLoop()
+            else:
+                sleep(0.1)         
 
  
-        pg.time.delay(5000)
-        pg.quit()   # pylint: disable=no-member
+               # pylint: disable=no-member
