@@ -113,7 +113,9 @@ class Window():
             if (keys[K_ESCAPE]):
                 pg.quit() # pylint: disable=no-member
 
-           
+
+
+            #no delay on keys           
             if(time()-last_time >0.5):
                 last_time = time()
                 self.UpdateOnLoop()
