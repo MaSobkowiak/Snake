@@ -4,6 +4,7 @@ import random
 import time
 from UI.grid import Grid, Node
 from time import sleep, time
+from Logic.aStar import a_path, a_path_alternative
 
 class Apple:
 
@@ -26,10 +27,6 @@ class Apple:
 
     def drawApple(self,screen):
         self.apple_node.draw(screen)
-
-        
-
-
 
 
 
@@ -114,10 +111,6 @@ class Snake:
         if(self.direction ==3):
             changeHead(self, (1, 0))
 
-    
-
-   
-
 
 
     def moveLeft(self):
@@ -144,7 +137,7 @@ class Snake:
 class Window():
 
     
-    def __init__(self, grid: Grid, start: (int,int)):
+    def __init__(self, grid: Grid):
         pg.init()   # pylint: disable=no-member
         # setup window
         pg.display.set_caption('Snake')
@@ -183,33 +176,75 @@ class Window():
             pg.quit() # pylint: disable=no-member
 
 
-    def start(self):
-        last_time = time()
-        while(self.grid._isRunning == True):
-            pg.event.pump()
-            keys = pg.key.get_pressed() 
+    def start(self, mode: int):
+        if(mode == 0):
+            last_time = time()
+            while(self.grid._isRunning == True):
+                pg.event.pump()
+                keys = pg.key.get_pressed() 
             
-            if (keys[K_RIGHT]):
-                self.snake.moveRight()                
-            if (keys[K_LEFT]):
-                self.snake.moveLeft() 
-            if (keys[K_UP]):
-                self.snake.moveUp()
-            if (keys[K_DOWN]):
-                self.snake.moveDown()
-            if (keys[K_ESCAPE]):
-                self.grid._isRunning = False
+                if (keys[pg.K_RIGHT]):
+                    self.snake.moveRight()                
+                if (keys[pg.K_LEFT]):
+                    self.snake.moveLeft() 
+                if (keys[pg.K_UP]):
+                    self.snake.moveUp()
+                if (keys[pg.K_DOWN]):
+                    self.snake.moveDown()
+                if (keys[pg.K_ESCAPE]):
+                    self.grid._isRunning = False
+               
+          
+                if(time()-last_time >0.2):
+                    last_time = time()
+                    self.updateOnLoop()
+                    self.updateMapOnLoop()
+                else:
+                    sleep(0.001)         
+
+        elif(mode == 1):
+            while(self.grid._isRunning == True):
+
+
+                def move(self, next_step: (int, int)):  
+                    if next_step[0] < self.snake.head.position[0]:
+                        self.snake.moveUp()
+                    elif next_step[0] > self.snake.head.position[0]:
+                        self.snake.moveDown()
+                    elif next_step[1] < self.snake.head.position[1]:
+                        self.snake.moveLeft()
+                    elif next_step[1] > self.snake.head.position[1]:
+                        self.snake.moveRight()        
+
+                sleep(0.07)
+                               
+                array = [[self.grid.table[col][row] for row in range(self.grid.cols)] for col in range(self.grid.rows)]
+                path = a_path(array,self.snake.head.position ,self.apple.apple_node.position)
+                
+                pg.event.pump()
+                keys = pg.key.get_pressed() 
+                if (keys[pg.K_ESCAPE]):
+                    self.grid._isRunning = False
+
+                
+
+                if(path == None):
+                    path = a_path_alternative(array,self.snake.head.position)
+                    print("A_alternative")
+                    if(path == None):
+                        self.grid._isRunning = False
+                    else:
+                        next_step = path
+                        move(self, next_step)
+                else:
+                    print("A_star")
+                    next_step = path[1]
+                    move(self,next_step)
+
                
 
-
-
-            #no delay on keys           
-            if(time()-last_time >0.2):
-                last_time = time()
                 self.updateOnLoop()
                 self.updateMapOnLoop()
-            else:
-                sleep(0.001)         
-
- 
-               # pylint: disable=no-member
+                                 
+                        
+                         
