@@ -7,6 +7,7 @@ import numpy as np
 
 
 class Grid:
+    _isRunning = True
 
     def __init__(self, cols: int, rows: int):
         self.table = [[Node(row, col)
@@ -14,6 +15,7 @@ class Grid:
                       for row in range(rows)]
         self.cols = cols
         self.rows = rows
+        self._isRunning = True
 
     def draw_map(self, screen: "PyGame screen"):
         """Draws whole map"""
