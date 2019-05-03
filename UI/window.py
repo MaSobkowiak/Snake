@@ -3,7 +3,6 @@ import numpy as np
 import random
 import time
 from UI.grid import Grid, Node
-from pygame.locals import *
 from time import sleep, time
 
 class Apple:
@@ -53,7 +52,6 @@ class Snake:
         def changeHead(self, move: (int,int)):
             position = (0,0)
             remove_node = None
-           # self.grid.change_field(self.head.row,self.head.col, 0)
             position = ( self.head.position[0]+move[0],self.head.position[1] + move[1])
 
             if(hitMap(self, (position[0], position[1])) == True):
@@ -138,7 +136,6 @@ class Snake:
     def drawSnake(self,screen):
         for x in self.body_list:
             x.draw(screen)
-            #pg.time.delay(500)
         self.tail.draw(screen)
     
      
@@ -165,7 +162,7 @@ class Window():
         screen_width = cols * (width + margin) + 2 * margin
         screen_height = rows * (height + margin) + 2 * margin
 
-        self.screen = pg.display.set_mode((screen_width, screen_height),pg.HWSURFACE)
+        self.screen = pg.display.set_mode((screen_width, screen_height),pg.HWSURFACE) # pylint: disable=no-member
         self.clock = pg.time.Clock()
         self.grid.draw_map(self.screen)
 
