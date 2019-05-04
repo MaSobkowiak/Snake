@@ -6,6 +6,7 @@ from UI.grid import Grid, Node
 from time import sleep, time
 from Logic.aStar import a_path, a_path_alternative
 
+
 class Apple:
 
     position = (0,0)
@@ -174,6 +175,7 @@ class Window():
     def quit(self):
         if(self.grid._isRunning == False):
             pg.quit() # pylint: disable=no-member
+            
 
 
     def start(self, mode: int):
@@ -183,15 +185,15 @@ class Window():
                 pg.event.pump()
                 keys = pg.key.get_pressed() 
             
-                if (keys[pg.K_RIGHT]):
+                if (keys[pg.K_RIGHT]):  # pylint: disable=no-member
                     self.snake.moveRight()                
-                if (keys[pg.K_LEFT]):
+                if (keys[pg.K_LEFT]):   # pylint: disable=no-member
                     self.snake.moveLeft() 
-                if (keys[pg.K_UP]):
+                if (keys[pg.K_UP]):     # pylint: disable=no-member
                     self.snake.moveUp()
-                if (keys[pg.K_DOWN]):
+                if (keys[pg.K_DOWN]):   # pylint: disable=no-member
                     self.snake.moveDown()
-                if (keys[pg.K_ESCAPE]):
+                if (keys[pg.K_ESCAPE]): # pylint: disable=no-member
                     self.grid._isRunning = False
                
           
@@ -223,7 +225,7 @@ class Window():
                 
                 pg.event.pump()
                 keys = pg.key.get_pressed() 
-                if (keys[pg.K_ESCAPE]):
+                if (keys[pg.K_ESCAPE]): # pylint: disable=no-member
                     self.grid._isRunning = False
 
                 
