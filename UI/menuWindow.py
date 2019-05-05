@@ -41,7 +41,7 @@ class MenuWindow():
         app = None
         grid = Grid(20, 10)
         app = Window(grid)
-        self.score = app.start(1)
+        self.score = app.start(2)
         self.v.set('Score: ' + str(self.score))
         
 
@@ -52,7 +52,7 @@ class MenuWindow():
         app = None
         grid = Grid(20, 10)
         app = Window(grid)
-        self.score = app.start(2)
+        self.score = app.start(1)
         self.v.set('Score: ' + str(self.score))
 
         
