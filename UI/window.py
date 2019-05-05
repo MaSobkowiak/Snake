@@ -40,6 +40,7 @@ class Snake:
     
     def __init__(self,grid : Grid):
         self.grid =grid
+        self.body_list.clear()
         grid.change_field(int(self.grid.rows/2),int(self.grid.cols/2),2)
         self.length =1
         self.head = grid.return_node(int(self.grid.rows/2),int(self.grid.cols/2))
@@ -54,8 +55,7 @@ class Snake:
 
             if(hitMap(self, (position[0], position[1])) == True):
                 self.grid._isRunning =False
-                print("Game Over  Score:", len(self.body_list))
-
+                
             elif(eatApple(self, (position[0],position[1])) == True):
                 self.head = self.grid.return_node(position[0],position[1])
                 self.grid.change_field(position[0],position[1],2)
@@ -63,12 +63,10 @@ class Snake:
                     n.change_field_type(3)
                 self.body_list.append(self.head)
                 apple.newApple()
-                print("Score: ", len(self.body_list))
-
+                
             elif(hitBody(self, (position[0],position[1])) == True):
                 self.grid._isRunning = False
-                print("Game Over  Score:", len(self.body_list))
-
+                
             else:
                 self.head = self.grid.return_node(position[0],position[1])
                 self.grid.change_field(position[0],position[1],2)
@@ -131,12 +129,16 @@ class Snake:
         for x in self.body_list:
             x.draw(screen)
         self.tail.draw(screen)
+
+    def returnScore(self):
+        return len(self.body_list)
     
      
 
 
 class Window():
 
+    screen = None
     
     def __init__(self, grid: Grid):
         pg.init()   # pylint: disable=no-member
@@ -175,11 +177,14 @@ class Window():
     def quit(self):
         if(self.grid._isRunning == False):
             pg.quit() # pylint: disable=no-member
+           
+            
+            
             
 
 
     def start(self, mode: int):
-        if(mode == 0):
+        if(mode == 1):
             last_time = time()
             while(self.grid._isRunning == True):
                 pg.event.pump()
@@ -196,15 +201,18 @@ class Window():
                 if (keys[pg.K_ESCAPE]): # pylint: disable=no-member
                     self.grid._isRunning = False
                
-          
-                if(time()-last_time >0.2):
+                
+                if(time()-last_time >0.2 or self.grid._isRunning ==False):
+                    
                     last_time = time()
                     self.updateOnLoop()
-                    self.updateMapOnLoop()
+                    if(self.grid._isRunning == True):
+                        self.updateMapOnLoop()
                 else:
-                    sleep(0.001)         
+                    sleep(0.001) 
+            return self.snake.returnScore()  
 
-        elif(mode == 1):
+        elif(mode == 2):
             while(self.grid._isRunning == True):
 
 
@@ -246,7 +254,11 @@ class Window():
                
 
                 self.updateOnLoop()
-                self.updateMapOnLoop()
+                if(self.grid._isRunning == True):
+                    self.updateMapOnLoop()
+
+
+            return self.snake.returnScore()  
                                  
                         
                          

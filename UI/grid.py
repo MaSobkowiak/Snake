@@ -8,6 +8,7 @@ import numpy as np
 
 class Grid:
     _isRunning = True
+    table = None
 
     def __init__(self, cols: int, rows: int):
         self.table = [[Node(row, col)

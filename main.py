@@ -1,14 +1,11 @@
-from UI.grid import Grid
-from UI.window import Window
+#from UI.grid import Grid
+#from UI.window import Window
+from UI.menuWindow import MenuWindow
 import sys
 
 
-def main(mode: int):
-    # initialize grid
-    print(sys.argv[1])
-    grid = Grid(20, 10)
-    app = Window(grid)
-    app.start(mode)
+def main():
+     MenuWindow()
 
 if __name__ == "__main__":
-    main(int(sys.argv[1]))
+    main()
