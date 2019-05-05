@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import Tk, PhotoImage, Label, Button, LEFT, StringVar
 from pathlib import Path
 from UI.grid import Grid
 from UI.window import Window
